@@ -13,7 +13,7 @@ void initDeck(Deck *deck);
 
 bool contains(Deck *deck, int value);
 
-bool add(Deck *deck, int id);
+bool add(Deck *deck, Card *card);
 
 void removeElement(Deck *deck, int value);
 

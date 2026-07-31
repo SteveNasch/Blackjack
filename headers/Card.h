@@ -6,4 +6,4 @@ typedef struct Node {
     struct Node *nextCard;
 } Card;
 
-void initCard(Card *card, int value, char kind);
+Card* initCard(Card *card, int value, int kind);
