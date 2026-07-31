@@ -7,4 +7,9 @@ add_executable(Blackjack main.cpp
         Card.cpp
         headers/Card.h
         headers/Deck.h
-        Deck.cpp)
+        Deck.cpp
+        Player.cpp
+        headers/Player.h
+        UserInterface.cpp
+        headers/UserInterface.h
+)

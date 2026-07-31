@@ -7,14 +7,14 @@ typedef struct {
     Card *card[DECK_SIZE];
 } Deck;
 
-int HashFunction(int value);
+int hashFunction(int id);
 
 void initDeck(Deck *deck);
 
-bool contains(Deck *deck, int value);
+bool contains(Deck *deck, int id);
 
-bool add(Deck *deck, Card *card);
+bool addToDeck(Deck *deck, Card *card);
 
-void removeElement(Deck *deck, int value);
+void removeElement(Deck *deck, int id);
 
-void printDeck(Deck *deck);
+Card* getCard(Deck *deck, int id);

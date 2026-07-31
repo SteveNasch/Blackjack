@@ -1,9 +1,9 @@
 #pragma once
 
 typedef struct Node {
-    int value, id;
-    char kind;
-    struct Node *nextCard;
+    int value, id, number;
+    int kind;
+    Node *nextCard;
 } Card;
 
-Card* initCard(Card *card, int value, int kind);
+Card* initCard(Card *card, int number, int kind);

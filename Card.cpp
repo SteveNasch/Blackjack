@@ -1,13 +1,16 @@
 #include "headers/Card.h"
 
-Card* initCard(Card *card, int value, int kind) {
-    card->id = (kind * 100) + value;
+Card* initCard(Card *card, int number, int kind) {
+    int value = number;
 
-    //Sets the correct value of face cards
+    card->id = kind * 100 + number;
+
     if (value > 10) value = 10;
+    if (value == 1) value = 11;
 
+    card->number = number;
     card->value = value;
-    card->kind = 'A' + kind;
+    card->kind = kind;
 
     return card;
 }
