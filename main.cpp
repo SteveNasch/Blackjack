@@ -19,6 +19,8 @@ int main() {
     Player player;
     Player dealer;
 
+    welcomeText();
+
     //Instantiate the players and deck
     initPlayer(&player);
     initDealer(&dealer);
@@ -53,7 +55,7 @@ int main() {
 
         switch (input) {
             case 1:
-                while (dealer.points < 21) {
+                while (dealer.points < 21 && dealer.points < player.points) {
                     buyCard(&dealer, &deck);
                     printPlayerCardsHorizontally(&dealer);
                     printPlayerCardsHorizontally(&player);
@@ -79,7 +81,7 @@ int main() {
                 printPlayerCardsHorizontally(&player);
                 calculatePlayerPoints(&player);
                 if (player.points > 21) {continue;}
-                while (dealer.points < 21) {
+                while (dealer.points < 21 && dealer.points < player.points) {
                     buyCard(&dealer, &deck);
                     printPlayerCardsHorizontally(&dealer);
                     printPlayerCardsHorizontally(&player);

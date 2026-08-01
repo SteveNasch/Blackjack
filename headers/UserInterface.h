@@ -6,6 +6,8 @@ void printCardRow(int row, int number, int suit);
 
 void printPlayerCardsHorizontally(Player *player);
 
+void welcomeText();
+
 void printButtons(Player *player);
 
 void winText(Player *player);
