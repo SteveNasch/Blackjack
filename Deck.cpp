@@ -1,7 +1,7 @@
 #include "headers/Deck.h"
 
-#include <complex>
-#include <bits/locale_facets_nonio.h>
+#include <cstdlib>
+#include <cstdio>
 
 int hashFunction(int id) {
     return std::abs(id) % DECK_SIZE;
@@ -89,4 +89,13 @@ Card* getCard(Deck *deck, int id) {
     }
 
     return NULL;
+}
+
+bool isDeckEmpty(Deck *deck) {
+    for (int i = 0; i < DECK_SIZE; i++) {
+        if (deck->card[i] != NULL) {
+            return false;
+        }
+    }
+    return true;
 }

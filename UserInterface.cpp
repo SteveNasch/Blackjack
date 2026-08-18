@@ -65,6 +65,16 @@ void printPlayerCardsHorizontally(Player *player) {
         }
     }
 
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (activeCards[j]->sequence < activeCards[i]->sequence) {
+                Node *tmp = activeCards[i];
+                activeCards[i] = activeCards[j];
+                activeCards[j] = tmp;
+            }
+        }
+    }
+
     for (int row = 0; row < 6; row++) {
         for (int c = 0; c < count; c++) {
             printCardRow(row, activeCards[c]->number, activeCards[c]->kind);

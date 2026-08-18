@@ -18,3 +18,5 @@ bool addToDeck(Deck *deck, Card *card);
 void removeElement(Deck *deck, int id);
 
 Card* getCard(Deck *deck, int id);
+
+bool isDeckEmpty(Deck *deck);

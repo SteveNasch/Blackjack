@@ -3,6 +3,7 @@
 typedef struct Node {
     int value, id, number;
     int kind;
+    int sequence;
     Node *nextCard;
 } Card;
 
