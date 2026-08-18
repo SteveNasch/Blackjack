@@ -52,6 +52,17 @@ void printCardRow(int row, int number, int suit) {
     }
 }
 
+static void printHiddenCardRow(int row) {
+    switch(row) {
+        case 0: printf(" _____  "); break;
+        case 1: printf("|? .  | "); break;
+        case 2: printf("| /.\\ | "); break;
+        case 3: printf("|(_._)| "); break;
+        case 4: printf("|  |  | "); break;
+        case 5: printf("|____?| "); break;
+    }
+}
+
 void printPlayerCardsHorizontally(Player *player) {
     Node* activeCards[21];
     int count = 0;
@@ -85,6 +96,43 @@ void printPlayerCardsHorizontally(Player *player) {
     printf("\n");
 }
 
+void printDealerCardsHidden(Player *dealer) {
+    Node* activeCards[21];
+    int count = 0;
+
+    for (int i = 0; i < DECK_SIZE; i++) {
+        Node* current = dealer->hand[i];
+        while (current != NULL) {
+            activeCards[count] = current;
+            count++;
+            current = current->nextCard;
+        }
+    }
+
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (activeCards[j]->sequence < activeCards[i]->sequence) {
+                Node *tmp = activeCards[i];
+                activeCards[i] = activeCards[j];
+                activeCards[j] = tmp;
+            }
+        }
+    }
+
+    for (int row = 0; row < 6; row++) {
+        for (int c = 0; c < count; c++) {
+            if (c == 1) {
+                printHiddenCardRow(row);
+            } else {
+                printCardRow(row, activeCards[c]->number, activeCards[c]->kind);
+            }
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+}
+
 void welcomeText(){
     printf(
     " /$$$$$$   /$$                                    /$$   /$$                               /$$      /$$               /$$$$$$$  /$$                    /$$                               /$$     \n"
@@ -101,6 +149,13 @@ void welcomeText(){
 );
 }
 
+void printCash(Player *player) {
+    printf("┌────────────────────┐\n"
+           "| Cash: R$%07.2f   |\n"
+           "└────────────────────┘\n\n",
+           player->cash);
+}
+
 void printButtons(Player *player) {
     printf("┌────────────────────┐    ┌───────────┐ ┌───────────┐ ┌────────────┐\n"
                  "| You have %02d points |    | 1 - Stand | |  2 - Hit  | | 3 - Double |\n"
@@ -111,13 +166,18 @@ void printButtons(Player *player) {
 void winText(Player *player) {
     printf("┌──────────────┐    ┌──────────────┐\n"
                  "| YOU WON!!!!! |    |  +R$%06.2f   |\n"
-                 "└──────────────┘    └──────────────┘\n"
-                 "%d",
-                 player->cash, player->points);
+                 "└──────────────┘    └──────────────┘\n",
+                 BET);
 }
 
 void loseText() {
     printf("┌──────────────┐\n"
                  "| YOU LOSE!!!! |\n"
+                 "└──────────────┘\n");
+}
+
+void pushText() {
+    printf("┌──────────────┐\n"
+                 "|    PUSH!     |\n"
                  "└──────────────┘\n");
 }

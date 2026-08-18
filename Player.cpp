@@ -103,19 +103,14 @@ void payOut(Player *player) {
     player->cash += BET * 2;
 }
 
-void dealerTurn(Player *dealer, Player *player, Deck *deck) {
-    while (dealer->points < 21 && dealer->points < player->points) {
-        buyCard(dealer, deck);
-        printPlayerCardsHorizontally(dealer);
-        printPlayerCardsHorizontally(player);
-        calculatePlayerPoints(dealer);
-        if (dealer->points < 21) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+bool isBlackjack(Player *player) {
+    int cardCount = 0;
+    for (int i = 0; i < DECK_SIZE; i++) {
+        Node *current = player->hand[i];
+        while (current != NULL) {
+            cardCount++;
+            current = current->nextCard;
+        }
     }
-
-    if (dealer->points > 21) {
-        payOut(player);
-        winText(player);
-    } else {
-        loseText();
-    }
+    return cardCount == 2 && player->points == 21;
 }
