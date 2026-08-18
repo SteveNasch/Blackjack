@@ -8,10 +8,6 @@
 
 int input;
 
-void verifyTotoints(Player &player) {
-
-}
-
 int main() {
     srand(time(nullptr));
 
@@ -25,6 +21,12 @@ int main() {
     initPlayer(&player);
     initDealer(&dealer);
     initDeck(&deck);
+
+    if (player.cash < BET) {
+        printf("Sem saldo para apostar!\n");
+        return 0;
+    }
+    placeBet(&player);
 
     //Dealer startup
     buyCard(&dealer, &deck);
@@ -44,6 +46,7 @@ int main() {
             printButtons(&player);
             scanf("%d", &input);
         } else if (player.points == 21) {
+            payOut(&player);
             winText(&player);
             player.active = false;
             return 0;
@@ -63,6 +66,7 @@ int main() {
                     if (dealer.points < 21) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 }
                 if (dealer.points > 21) {
+                    payOut(&player);
                     winText(&player);
                 } else {
                     loseText();
@@ -74,19 +78,31 @@ int main() {
                 buyCard(&player, &deck);
                 printPlayerCardsHorizontally(&player);
                 calculatePlayerPoints(&player);
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 break;
             case 3:
                 printPlayerCardsHorizontally(&dealer);
                 buyCard(&player, &deck);
                 printPlayerCardsHorizontally(&player);
                 calculatePlayerPoints(&player);
-                if (player.points > 21) {continue;}
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                if (player.points > 21) {
+                    loseText();
+                    player.active = false;
+                    break;
+                }
                 while (dealer.points < 21 && dealer.points < player.points) {
                     buyCard(&dealer, &deck);
                     printPlayerCardsHorizontally(&dealer);
                     printPlayerCardsHorizontally(&player);
                     calculatePlayerPoints(&dealer);
                     if (dealer.points < 21) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                }
+                if (dealer.points > 21) {
+                    payOut(&player);
+                    winText(&player);
+                } else {
+                    loseText();
                 }
                 player.active = false;
                 break;

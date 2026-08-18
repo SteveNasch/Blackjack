@@ -3,19 +3,11 @@
 #include <cstdio>
 #include <cstdlib>
 
-void initPlayer(Player *player) {
+void initPlayer(Player *player, bool isDealer) {
     player->points = 0;
-    player->cash = INITIAL_CASH;
-    player->active = true;
-    for (int i = 0; i < DECK_SIZE; i++) {
-        player->hand[i] = NULL;
-    }
-}
-
-void initDealer(Player *player) {
-    player->points = 0;
-    player->cash = 0;
-    player->active = false;
+    player->cash = isDealer ? 0 : INITIAL_CASH;
+    player->active = !isDealer;
+    player->sequenceCounter = 0;
     for (int i = 0; i < DECK_SIZE; i++) {
         player->hand[i] = NULL;
     }
@@ -51,6 +43,7 @@ bool addToHand(Player *player, Card *card) {
     newCard->kind = card->kind;
     newCard->value = card->value;
     newCard->number = card->number;
+    newCard->sequence = player->sequenceCounter++;
 
     newCard->nextCard = player->hand[index];
     player->hand[index] = newCard;
@@ -58,11 +51,11 @@ bool addToHand(Player *player, Card *card) {
     return true;
 }
 
-void buyCard(Player *player, Deck *deck) {
+Card* buyCard(Player *player, Deck *deck) {
     Card *drawnCard = NULL;
     int randomId = 0;
 
-    while (drawnCard == NULL) {
+    while (drawnCard == NULL && !isDeckEmpty(deck)) {
         int randomKind = rand() % 4 + 1;
         int randomNum = rand() % 13 + 1;
         randomId = randomKind * 100 + randomNum;
@@ -70,8 +63,13 @@ void buyCard(Player *player, Deck *deck) {
         drawnCard = getCard(deck, randomId);
     }
 
+    if (drawnCard == NULL) {
+        return NULL;
+    }
+
     addToHand(player, drawnCard);
     removeElement(deck, randomId);
+    return drawnCard;
 }
 
 void calculatePlayerPoints(Player *player) {
@@ -94,5 +92,30 @@ void calculatePlayerPoints(Player *player) {
     while (player->points > 21 && aceCount > 0) {
         player->points -= 10;
         aceCount--;
+    }
+}
+
+void placeBet(Player *player) {
+    player->cash -= BET;
+}
+
+void payOut(Player *player) {
+    player->cash += BET * 2;
+}
+
+void dealerTurn(Player *dealer, Player *player, Deck *deck) {
+    while (dealer->points < 21 && dealer->points < player->points) {
+        buyCard(dealer, deck);
+        printPlayerCardsHorizontally(dealer);
+        printPlayerCardsHorizontally(player);
+        calculatePlayerPoints(dealer);
+        if (dealer->points < 21) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+
+    if (dealer->points > 21) {
+        payOut(player);
+        winText(player);
+    } else {
+        loseText();
     }
 }

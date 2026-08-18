@@ -1,4 +1,5 @@
 #pragma once
+#include "Player.h"
 
 void getCardValueString(int number, char *str);
 

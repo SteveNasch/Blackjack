@@ -3,22 +3,28 @@
 #include "Deck.h"
 
 #define INITIAL_CASH 50.00
+#define BET 5.00
 
 typedef struct {
     int points;
     double cash;
     Card *hand[DECK_SIZE];
     bool active;
+    int sequenceCounter;
 } Player;
 
-void initPlayer(Player *player);
-
-void initDealer(Player *player);
+void initPlayer(Player *player, bool isDealer);
 
 bool contains(Player *player, int id);
 
 bool addToHand(Player *player, Card *card);
 
-void buyCard(Player *player, Deck *deck);
+Card* buyCard(Player *player, Deck *deck);
 
 void calculatePlayerPoints(Player *player);
+
+void placeBet(Player *player);
+
+void payOut(Player *player);
+
+void dealerTurn(Player *dealer, Player *player, Deck *deck);
