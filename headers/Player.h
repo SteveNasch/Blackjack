@@ -27,4 +27,4 @@ void placeBet(Player *player);
 
 void payOut(Player *player);
 
-void dealerTurn(Player *dealer, Player *player, Deck *deck);
+bool isBlackjack(Player *player);
